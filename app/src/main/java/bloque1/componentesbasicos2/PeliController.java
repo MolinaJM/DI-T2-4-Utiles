@@ -58,7 +58,8 @@ public class PeliController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         movieTitle.setText("Inception");
-        yearSpinner.getValueFactory().setValue(2010);//Año de la peli
+        yearSpinner.getValueFactory().setValue(2010);//Año de la peli, no existe un .setValue directo
+        System.out.println(yearSpinner.getValue());
 
         //Configuramos el contenido del accordion
         TextArea sinopsis = new TextArea("Inception es una película de ciencia ficción y acción que explora el mundo de los sueños y la manipulación mental. La trama se centra en Dom Cobb, un experto ladrón que se adentra en los sueños de las personas para robarles sus secretos más profundos. \n"
@@ -69,7 +70,7 @@ public class PeliController implements Initializable {
         TextArea actores = new TextArea("Leonardo DiCaprio\nJoseph Gordon-Levitt\nEllen Page\n// ... ");
         actores.setEditable(false);
         sinopsis.setEditable(false);
-        sinopsis.setWrapText(true);
+        sinopsis.setWrapText(true); //Encaja las líneas en el contenedor
 
         //Accordion: es una agrupación de TitledPane 
         TitledPane actoresPane = new TitledPane("Actores", actores);
