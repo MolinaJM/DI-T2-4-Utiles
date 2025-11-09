@@ -147,20 +147,22 @@ public class EjemploFilteredCombo_Objetos extends Application {
             }
         });
 
-        //---------------------------------------------------------------------
-        //NOTE: A partir de aquí hay cambios
-
-        /*Mostramos un valor pero obtenemos otro asociado
-        Ejemplo:
-        -creamos un OL de objetos Serie (Nombre,Año), quiero seleccionar Nombre pero sacar Año asociado 
-        -Primero recorremos OL Serie y vamos rellenando otro OL que alimenta el combo usando 
-        series.add(SeriesBBDD.get(i).getNombre());
-        -Cuando cambio de selección, para obtener el ID hago lo siguiente:
-            el índice del OL del combo me sirve para obtener el índice del objeto en el OL de series, y de ahí saco su ID
-         */
+        
         comboBox.getSelectionModel().selectedItemProperty().addListener((observable, _ , newValue) -> {
             if (newValue != null) {
                 txtCombo.positionCaret(txtCombo.getText().length()); //Se posiciona al final para poder borrar fácilmente
+                //---------------------------------------------------------------------
+                //NOTE: A partir de aquí hay cambios
+
+                /*Mostramos un valor pero obtenemos otro asociado
+                Ejemplo:
+                -creamos un OL de objetos Serie (Nombre,Año), quiero seleccionar Nombre pero sacar Año asociado 
+                -Primero recorremos OL Serie y vamos rellenando otro OL que alimenta el combo usando 
+                series.add(SeriesBBDD.get(i).getNombre());
+                -Cuando cambio de selección, para obtener el ID hago lo siguiente:
+                    el índice del OL del combo me sirve para obtener el índice del objeto en el OL de series, y de ahí saco su ID
+                */
+                        
                 Integer id=SeriesBBDD.get(series.indexOf(comboBox.getValue())).getAnyo(); //Uso el getter del objeto seleccionado
                 System.out.println("Id de serie es "+id.toString());
             }
