@@ -1,106 +1,12 @@
 {
-    // Use IntelliSense to learn about possible attributes.
-    // Hover to view descriptions of existing attributes.
-    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
-        
         {
             "type": "java",
             "name": "Current File",
             "request": "launch",
-            "mainClass": "${file}"
-        },
-        {
-            "type": "java",
-            "name": "LanzadorEjemplosFX",
-            "request": "launch",
-            "mainClass": "com.javafx.LanzadorEjemplosFX",
-            "projectName": "app"
-        },
-        {
-            "type": "java",
-            "name": "EjemploFilteredCombo",
-            "request": "launch",
-            "mainClass": "com.javafx.autocompletado.EjemploFilteredCombo",
-            "projectName": "app"
-        },
-        {
-            "type": "java",
-            "name": "EjemploFilteredCombo_Objetos",
-            "request": "launch",
-            "mainClass": "com.javafx.autocompletado.EjemploFilteredCombo_Objetos",
-            "projectName": "app"
-        },
-        {
-            "type": "java",
-            "name": "ResizerImagenyConversionB64",
-            "request": "launch",
-            "mainClass": "com.javafx.cargayconversionb64.ResizerImagenyConversionB64",
-            "projectName": "app"
-        },
-        {
-            "type": "java",
-            "name": "Main",
-            "request": "launch",
-            "mainClass": "com.javafx.componentesbasicos2.Main",
-            "projectName": "app"
-        },
-        {
-            "type": "java",
-            "name": "contenedores2",
-            "request": "launch",
-            "mainClass": "com.javafx.contenedores2.contenedores2",
-            "projectName": "app"
-        },
-        {
-            "type": "java",
-            "name": "HtmlEditorExample",
-            "request": "launch",
-            "mainClass": "com.javafx.htmleditor.HtmlEditorExample",
-            "projectName": "app"
-        },
-        {
-            "type": "java",
-            "name": "EjemploMultimedia",
-            "request": "launch",
-            "mainClass": "com.javafx.multimedia.EjemploMultimedia",
-            "projectName": "app"
-        },
-        {
-            "type": "java",
-            "name": "EjemploPaginacion",
-            "request": "launch",
-            "mainClass": "com.javafx.paginacion.EjemploPaginacion",
-            "projectName": "app"
-        },
-        {
-            "type": "java",
-            "name": "EjemploEventFilter",
-            "request": "launch",
-            "mainClass": "com.javafx.todosloseventos.EjemploEventFilter",
-            "projectName": "app"
-        },
-        {
-            "type": "java",
-            "name": "EventosCompleto",
-            "request": "launch",
-            "mainClass": "com.javafx.todosloseventos.EventosCompleto",
-            "projectName": "app"
-        },
-        {
-            "type": "java",
-            "name": "EventosImagenes",
-            "request": "launch",
-            "mainClass": "com.javafx.todosloseventos.EventosImagenes",
-            "projectName": "app"
-        },
-        {
-            "type": "java",
-            "name": "EjemploTreeTableView",
-            "request": "launch",
-            "mainClass": "com.javafx.treetableview.EjemploTreeTableView",
-            "projectName": "app"
+            "mainClass": "${file}",
+            "vmArgs": "--module-path C:\\javafx-sdk-25\\lib --add-modules javafx.base,javafx.controls,javafx.swing,javafx.fxml,javafx.media,javafx.web --enable-native-access=javafx.graphics"
         }
     ]
 }
