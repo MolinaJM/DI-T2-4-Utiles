@@ -1,4 +1,4 @@
-package com.javafx.cargayconversionb64;
+package bloque1.cargayconversionb64;
 
 import java.awt.image.BufferedImage;
 import javafx.application.Application;
@@ -48,15 +48,16 @@ public class ResizerImagenyConversionB64 extends Application {
                 try {
                     Image originalImage = new Image(selectedFile.toURI().toString());
                     long originalSize = selectedFile.length();
-                    //Redimensionamos a 150x150 por ejemplo
+                    //Redimensionamos a 150x150 por ejemplo, preservando ratio y suavizando resultado
                     Image resizedImage = new Image(originalImage.getUrl(), 150, 150, true, true);
                     imageView.setImage(resizedImage);
 
                     //Se realizan conversiones para usar b64:resizedImage->BufferedImage->baos->png
+                    //Imagen en memoria en forma de matriz, segundo parámetro es si queremos pasarle un bufferedImage ya creado.
                     BufferedImage bufferedImage = SwingFXUtils.fromFXImage(resizedImage, null);
                     ByteArrayOutputStream baos = new ByteArrayOutputStream();
                     ImageIO.write(bufferedImage, "png", baos);//Convierte a PNG de forma temporal
-                    //Convertimos a byte
+                    //Convertimos a array de bytes para que Base64 codifique
                     byte[] imageBytes = baos.toByteArray();
                     String base64Image = Base64.getEncoder().encodeToString(imageBytes);
 

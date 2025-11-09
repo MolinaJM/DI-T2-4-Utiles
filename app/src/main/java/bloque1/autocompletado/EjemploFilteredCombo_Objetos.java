@@ -1,4 +1,4 @@
-package com.javafx.autocompletado; //Modificar al package correcto
+package bloque1.autocompletado; //Modificar al package correcto
 
 import javafx.application.Application;
 import javafx.collections.FXCollections;
@@ -7,6 +7,7 @@ import javafx.collections.transformation.FilteredList;
 import javafx.scene.Scene;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
@@ -91,44 +92,63 @@ public class EjemploFilteredCombo_Objetos extends Application {
         for (int i=0; i<SeriesBBDD.size();i++){
             series.add(SeriesBBDD.get(i).getNombre());
         }
-        
+
         //---------------------------------------------------------------------
-        //A partir de aquí es exactamente igual que el proyecto anterior
+        //NOTE: A partir de aquí es exactamente igual que el proyecto anterior
         
-        //Se crea el FilteredList a partir del OL
+        // FilteredList filtra dinámicamente un OL.
+        // El predicado (p) es una condición que indica si un valor debe mostrarse en la
+        // lista filtrada o no
+        // Inicialmente se pone a p->true (muestra todo)
+        // https://javadoc.scijava.org/JavaFX25/javafx.base/javafx/collections/transformation/FilteredList.html
         FilteredList<String> filteredItems = new FilteredList<>(series, p -> true);
 
         ComboBox<String> comboBox = new ComboBox<>(filteredItems);
         comboBox.setEditable(true);
-       
-        //El editor me permite personalizar lo que se escribe en el combo y cómo funciona
+
+        // El editor me permite personalizar lo que se escribe en el combo y cómo
+        // funciona
         TextField txtCombo = comboBox.getEditor();
 
-        //Metemos un listener a la propiedad del texto para que detecte cambios conforme vamos escribiendo
+        //Eventos, primero se procesoa el EventFilter y luego el Listener
+
+        // Añadimos un EventFilter para interceptar el evento antes de que el componente
+        // lo procese: evita que el espacio lo tome como entrada vacía para el filtro y salte una excepción)
+        txtCombo.addEventFilter(KeyEvent.KEY_TYPED, event -> {
+            if (event.getCharacter().equals(" ")) {
+                event.consume(); // bloquea que se escriba el espacio
+            }
+        });
+
+        // Metemos un listener a la propiedad del texto para que detecte cambios
+        // conforme vamos escribiendo
         txtCombo.textProperty().addListener((obs, oldValue, newValue) -> {
             final String selected = comboBox.getSelectionModel().getSelectedItem();
 
-            //Si no seleccionamos nada en el combo, o si queremos ampliar la selección, establece el nuevo valor
-            if (selected == null || !selected.equals(txtCombo.getText())) {
-                txtCombo.setText(newValue);
-                System.out.println("Viejo: " + oldValue + " Nuevo: " + newValue);
-                //Solo filtra al añadir texto
-                if (newValue.length() > oldValue.length()) {
-                    //Condición puede ser: contiene, empieza por (startsWith), acaba por (endsWith)...
-                    //filteredItems.setPredicate(p -> p.toLowerCase().contains(newValue.toLowerCase()));
-                    filteredItems.setPredicate(p -> p.toLowerCase().startsWith(newValue.toLowerCase()));
-                    comboBox.setVisibleRowCount(5);//Establecemos filas visibles
-                    comboBox.show();
-                } 
-            } else {
-                System.out.println("Seleccionada: " + selected);
-                filteredItems.setPredicate(p -> true);//Restablece el filtro
+            //Si el campo está vacío, el filtro no actúa
+            if (newValue == null || newValue.trim().isEmpty()) {
+                filteredItems.setPredicate(p -> true);
+                comboBox.hide();//ocultamos combo
+                return;
             }
 
-        }
-        );
+            //Si no hay nada seleccionado y he escrito algo...
+            if (selected == null || !selected.equals(newValue)) {
+                //Se aplica CONDICIÓN a STRING puede ser:
+                //contiene, empieza por (startsWith), acaba en (endsWith)...
+                //filteredItems.setPredicate(p ->
+                //p.toLowerCase().contains(newValue.toLowerCase()));
+                filteredItems.setPredicate(p -> p.toLowerCase().startsWith(newValue.toLowerCase().trim()));
+                comboBox.setVisibleRowCount(5);
+                comboBox.show();
+                // txtCombo.positionCaret(newValue.length());
+            } else {
+                filteredItems.setPredicate(p -> true);
+            }
+        });
+
         //---------------------------------------------------------------------
-        //A partir de aquí hay cambios
+        //NOTE: A partir de aquí hay cambios
 
         /*Mostramos un valor pero obtenemos otro asociado
         Ejemplo:
@@ -138,7 +158,7 @@ public class EjemploFilteredCombo_Objetos extends Application {
         -Cuando cambio de selección, para obtener el ID hago lo siguiente:
             el índice del OL del combo me sirve para obtener el índice del objeto en el OL de series, y de ahí saco su ID
          */
-        comboBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+        comboBox.getSelectionModel().selectedItemProperty().addListener((observable, _ , newValue) -> {
             if (newValue != null) {
                 txtCombo.positionCaret(txtCombo.getText().length()); //Se posiciona al final para poder borrar fácilmente
                 Integer id=SeriesBBDD.get(series.indexOf(comboBox.getValue())).getAnyo(); //Uso el getter del objeto seleccionado

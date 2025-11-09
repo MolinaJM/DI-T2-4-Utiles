@@ -3,6 +3,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "EjemploFilteredCombo",
+            "request": "launch",
+            "mainClass": "bloque1.autocompletado.EjemploFilteredCombo",
+            "projectName": "app"
+        },
+        {
+            "type": "java",
             "name": "Current File",
             "request": "launch",
             "mainClass": "${file}",
