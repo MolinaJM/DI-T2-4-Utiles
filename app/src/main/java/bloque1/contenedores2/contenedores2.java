@@ -8,6 +8,7 @@ import javafx.application.Application;
 import javafx.geometry.Orientation;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
@@ -32,22 +33,28 @@ public class contenedores2 extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        //TitledPane: se puede expandir para mostrar info extra y contraer (inicialmente colapsado para que el usuario lo expanda)
+        //TitledPane: se puede expandir para mostrar info extra y contraer (inicialmente colapsado 
+        //para que el usuario lo expanda)
         //Se suelen usar como hijos del Nodo Accordion
         TitledPane titledPane = new TitledPane();
         titledPane.setText("USS Enterprise (TITLED PANE)");
-        titledPane.setContent(new Label("The starship of Captain Kirk and his crew."));
+        titledPane.setContent(new Label("The starship of Captain Kirk and his crew."));//Acepta cualquier tipo de nodo como hijo
         titledPane.setExpanded(false);//Inicialmente colapsado
 
         //ButtonBar: organiza botones de forma uniforme, es una especie de Toolbar pero SOLO para botones
+        //La única diferencia destacable es ButtonData, que reorganiza botones según "convenciones" del SSOO
+        //Windows: [Cancelar] [Aceptar] // Linux/MACOS [Cancelar Aceptar]
         ButtonBar buttonBar = new ButtonBar();
         Button engageButton = new Button("Engage");
         engageButton.setOnAction(e -> System.out.println("Engage!!"));
         Button warpButton = new Button("Warp Speed");
         warpButton.setOnAction(e -> System.out.println("Warp Speed!!"));
         buttonBar.getButtons().addAll(new Label("BUTTON BAR"), engageButton, warpButton);
+        buttonBar.setButtonData(engageButton, ButtonData.OK_DONE);
+        buttonBar.setButtonData(warpButton, ButtonData.CANCEL_CLOSE);
 
-        //DialogPane: expande diálogo con info adicional
+
+        //DialogPane: expande diálogo con info adicional. Podemos meter cualquier nodo dentro.
         DialogPane dialogPane = new DialogPane();
         dialogPane.setContentText("Captain's Log (DIALOG PANE)");
         dialogPane.setExpandableContent(new Label("Date: Stardate 41153.7. Reporting on the latest mission updates..."));
@@ -64,7 +71,7 @@ public class contenedores2 extends Application {
                 new Button("McCoy"),
                 new Button("Scotty")
         );
-        // Agregar más botones dinámicamente
+        // Agregar más botones dinámicamente para ver cómo se comportan ante un redimensionamiento
         Button addButton = new Button("Añadir Button");
         addButton.setOnAction(e -> flowPane.getChildren().add(new Button("NUEVO!")));
         flowPane.getChildren().add(addButton);
@@ -90,8 +97,8 @@ public class contenedores2 extends Application {
         // Se usa para interfaces muy estructuradas, como tableros con iconos o paneles de control. Es una especie
         // de GridPane pero que se redimensiona automáticamente
         TilePane tilePane = new TilePane();
-        tilePane.setPrefColumns(2);
-        tilePane.setPrefRows(3);
+        tilePane.setPrefColumns(2); //Preferencias: las intenta respetar.
+        tilePane.setPrefRows(3); //Preferencias, si hay más filas no las evita!
         tilePane.getChildren().addAll(
                 new Label("TILEPANE"),
                 new Button("Phaser"),
@@ -107,13 +114,13 @@ public class contenedores2 extends Application {
         // SplitPane1
         SplitPane splitPane1 = new SplitPane();
         splitPane1.setOrientation(Orientation.HORIZONTAL);
-        splitPane1.setPrefHeight(300);
-        splitPane1.getItems().addAll(titledPane, buttonBar, dialogPane);
+        splitPane1.setPrefHeight(300);//Altura preferida
+        splitPane1.getItems().addAll(titledPane, buttonBar, dialogPane); //Reparte espacio
 
         // SplitPane2
         SplitPane splitPane2 = new SplitPane();
         splitPane2.setOrientation(Orientation.HORIZONTAL);
-        splitPane2.setPrefHeight(300);
+        splitPane2.setPrefHeight(300);//Altura preferida
         splitPane2.setDividerPositions(0.3, 0.5, 0.6); // Son % donde se colocan los separadores
         splitPane2.getItems().addAll(flowPane, vbox, textFlow, tilePane);
 
