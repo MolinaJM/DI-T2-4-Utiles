@@ -43,7 +43,7 @@ public class contenedores2 extends Application {
 
         //ButtonBar: organiza botones de forma uniforme, es una especie de Toolbar pero SOLO para botones
         //La única diferencia destacable es ButtonData, que reorganiza botones según "convenciones" del SSOO
-        //Windows: [Cancelar] [Aceptar] // Linux/MACOS [Cancelar Aceptar]
+        //Windows: [Cancelar] [Aceptar] // Linux/MACOS [Aceptar Cancelar]
         ButtonBar buttonBar = new ButtonBar();
         Button engageButton = new Button("Engage");
         engageButton.setOnAction(e -> System.out.println("Engage!!"));
