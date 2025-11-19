@@ -5,5 +5,5 @@
 build
 
 /app/build
-/app/src/main/java/bloque2
+#/app/src/main/java/bloque2
 /app/src/main/java/bloque3
