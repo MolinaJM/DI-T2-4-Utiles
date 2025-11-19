@@ -141,14 +141,13 @@ public class EjemploFilteredCombo_02_Objetos extends Application {
                 filteredItems.setPredicate(p -> p.toLowerCase().startsWith(newValue.toLowerCase().trim()));
                 comboBox.setVisibleRowCount(5);
                 comboBox.show();
-                // txtCombo.positionCaret(newValue.length());
             } else {
                 filteredItems.setPredicate(p -> true);
             }
         });
 
         
-        comboBox.getSelectionModel().selectedItemProperty().addListener((observable, _ , newValue) -> {
+        comboBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue , newValue) -> {
             if (newValue != null) {
                 txtCombo.positionCaret(txtCombo.getText().length()); //Se posiciona al final para poder borrar fácilmente
                 //---------------------------------------------------------------------

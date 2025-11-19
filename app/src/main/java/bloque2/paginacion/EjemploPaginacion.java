@@ -64,15 +64,15 @@ public class EjemploPaginacion extends Application {
         pagination.setMaxPageIndicatorCount(3);//Botones en separador
 
         //Contenido dinámico compartido
-        Label tituloCuento = new Label();
-        tituloCuento.setFont(new Font("Arial", 24));
+        Label cabeceraCuento = new Label();
+        cabeceraCuento.setFont(new Font("Arial", 24));
         TextArea txtCuento = new TextArea();
         txtCuento.setFont(new Font("Arial", 24));
         txtCuento.setWrapText(true);
 
         //Cada página se genera dinámicamente
         pagination.setPageFactory(pagina -> {
-            tituloCuento.setText("Página Nº "+ pagina);
+            cabeceraCuento.setText("Página Nº "+ pagina);
             //Cambiamos el contenido según la página mediante un rule switch
             // Mostrar el cuento correspondiente a la página
             if (pagina < cuentos.size()) {
@@ -80,7 +80,7 @@ public class EjemploPaginacion extends Application {
             } else {
                 txtCuento.setText("No hay más cuentos!");
             }
-            return new VBox(tituloCuento, txtCuento);
+            return new VBox(cabeceraCuento, txtCuento);
         });
 
         //Usamos stackPane porque con el vBox se ve la "animación" de cambio
