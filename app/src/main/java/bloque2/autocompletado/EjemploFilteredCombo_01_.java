@@ -52,10 +52,11 @@ public class EjemploFilteredCombo_01_ extends Application {
         // funciona
         TextField txtCombo = comboBox.getEditor();
 
-        //Eventos, primero se procesoa el EventFilter y luego el Listener
+        // Eventos, primero se procesa el EventFilter y luego el Listener
 
         // Añadimos un EventFilter para interceptar el evento antes de que el componente
-        // lo procese: evita que el espacio lo tome como entrada vacía para el filtro y salte una excepción)
+        // lo procese: evita que el espacio lo tome como entrada vacía para el filtro y
+        // salte una excepción)
         txtCombo.addEventFilter(KeyEvent.KEY_TYPED, event -> {
             if (event.getCharacter().equals(" ")) {
                 event.consume(); // bloquea que se escriba el espacio
@@ -67,23 +68,22 @@ public class EjemploFilteredCombo_01_ extends Application {
         txtCombo.textProperty().addListener((obs, oldValue, newValue) -> {
             final String selected = comboBox.getSelectionModel().getSelectedItem();
 
-            //Si el campo está vacío, el filtro no actúa
+            // Si el campo está vacío, oculta y restaura el filtro
             if (newValue == null || newValue.trim().isEmpty()) {
                 filteredItems.setPredicate(p -> true);
-                comboBox.hide();//ocultamos combo
+                comboBox.hide();// ocultamos combo
                 return;
             }
 
-            //Si no hay nada seleccionado y he escrito algo...
+            // Si no hay nada seleccionado en el combo y he escrito algo comienza el filtrado
             if (selected == null || !selected.equals(newValue)) {
-                //Se aplica CONDICIÓN a STRING puede ser:
-                //contiene, empieza por (startsWith), acaba en (endsWith)...
-                //filteredItems.setPredicate(p ->
-                //p.toLowerCase().contains(newValue.toLowerCase()));
+                // Se aplica CONDICIÓN a STRING puede ser:
+                // contiene, empieza por (startsWith), acaba en (endsWith)...
+                // filteredItems.setPredicate(p ->
+                // p.toLowerCase().contains(newValue.toLowerCase()));
                 filteredItems.setPredicate(p -> p.toLowerCase().startsWith(newValue.toLowerCase().trim()));
                 comboBox.setVisibleRowCount(5);
                 comboBox.show();
-                // txtCombo.positionCaret(newValue.length());
             } else {
                 filteredItems.setPredicate(p -> true);
             }
@@ -98,7 +98,7 @@ public class EjemploFilteredCombo_01_ extends Application {
          */
         comboBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {
-                txtCombo.positionCaret(txtCombo.getText().length()); 
+                txtCombo.positionCaret(txtCombo.getText().length());
                 // Se posiciona al final para poder borrar fácilmente
                 // Integer id=Series(comboBox.getSelectedIndex()).getDNI(); //Uso el getter del
                 // objeto seleccionado
