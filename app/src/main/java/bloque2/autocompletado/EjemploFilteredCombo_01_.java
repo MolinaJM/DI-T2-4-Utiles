@@ -99,9 +99,6 @@ public class EjemploFilteredCombo_01_ extends Application {
         comboBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {
                 txtCombo.positionCaret(txtCombo.getText().length());
-                // Se posiciona al final para poder borrar fácilmente
-                // Integer id=Series(comboBox.getSelectedIndex()).getDNI(); //Uso el getter del
-                // objeto seleccionado
             }
         });
 
