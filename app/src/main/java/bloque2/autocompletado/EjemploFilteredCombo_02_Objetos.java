@@ -11,13 +11,15 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
-/** Filtered Combo con Modelo
+/**
+ * Filtered Combo con Modelo
  *
  * @author JMMolina
  */
 
 public class EjemploFilteredCombo_02_Objetos extends Application {
 
+    //No tiene por qué estar ordenada
     private ObservableList<Serie> SeriesBBDD = FXCollections.observableArrayList(
             new Serie("Breaking Bad", 2008),
             new Serie("Game of Thrones", 2011),
@@ -73,9 +75,7 @@ public class EjemploFilteredCombo_02_Objetos extends Application {
             new Serie("The Mentalist", 2008),
             new Serie("Prison Break", 2005),
             new Serie("Six Feet Under", 2001),
-            new Serie("Dark", 2017)
-    );
-
+            new Serie("Dark", 2017));
 
     public static void main(String[] args) {
         launch(args);
@@ -83,25 +83,26 @@ public class EjemploFilteredCombo_02_Objetos extends Application {
 
     @Override
     public void start(Stage stage) {
-        //FilteredList filtra dinámicamente un OL. 
-        //El predicado (p) es una condición que indica si un valor debe mostrarse en la lista filtrada o no
-        //Inicialmente se pone a p->true (muestra todo)
+        // FilteredList filtra dinámicamente un OL.
+        // El predicado (p) es una condición que indica si un valor debe mostrarse en la
+        // lista filtrada o no
+        // Inicialmente se pone a p->true (muestra todo)
         ObservableList<String> series = FXCollections.observableArrayList();
-        
-        //Se rellena el OL que alimenta el combo
-        for (int i=0; i<SeriesBBDD.size();i++){
+
+        // Se rellena el OL que alimenta el combo
+        for (int i = 0; i < SeriesBBDD.size(); i++) {
             series.add(SeriesBBDD.get(i).getNombre());
         }
 
-        //---------------------------------------------------------------------
-        //NOTE: A partir de aquí es exactamente igual que el proyecto anterior
-        
+        // ---------------------------------------------------------------------
+        // NOTE: A partir de aquí es exactamente igual que el proyecto anterior
+
         // FilteredList filtra dinámicamente un OL.
         // El predicado (p) es una condición que indica si un valor debe mostrarse en la
         // lista filtrada o no
         // Inicialmente se pone a p->true (muestra todo)
         // https://javadoc.scijava.org/JavaFX25/javafx.base/javafx/collections/transformation/FilteredList.html
-        FilteredList<String> filteredItems = new FilteredList<>(series, p -> true);
+        FilteredList<String> filteredItems = new FilteredList<String>(series, p -> true);
 
         ComboBox<String> comboBox = new ComboBox<>(filteredItems);
         comboBox.setEditable(true);
@@ -110,11 +111,14 @@ public class EjemploFilteredCombo_02_Objetos extends Application {
         // funciona
         TextField txtCombo = comboBox.getEditor();
 
-        //Eventos, primero se procesoa el EventFilter y luego el Listener
+        // Eventos, primero se procesoa el EventFilter y luego el Listener
 
-        // Añadimos un EventFilter para interceptar el evento antes de que el componente
-        // lo procese: evita que el espacio lo tome como entrada vacía para el filtro y salte una excepción)
-        txtCombo.addEventFilter(KeyEvent.KEY_TYPED, event -> {
+
+          // Añadimos un EventFilter para interceptar el evento antes de que el componente
+        // lo procese: 
+        // 1) evita que el espacio lo tome como que queremos SELECCIONAR o
+        // 2) evita que una vez seleccionado algo, si le damos a ESPACIO lo coloca al principio de la edición
+         txtCombo.addEventFilter(KeyEvent.KEY_TYPED, event -> {
             if (event.getCharacter().equals(" ")) {
                 event.consume(); // bloquea que se escriba el espacio
             }
@@ -125,45 +129,51 @@ public class EjemploFilteredCombo_02_Objetos extends Application {
         txtCombo.textProperty().addListener((obs, oldValue, newValue) -> {
             final String selected = comboBox.getSelectionModel().getSelectedItem();
 
-            //Si el campo está vacío, el filtro no actúa
+            // Si el campo está vacío, el filtro no actúa
+            // ocurre cuando borro el texto del combo
             if (newValue == null || newValue.trim().isEmpty()) {
                 filteredItems.setPredicate(p -> true);
-                comboBox.hide();//ocultamos combo
+                comboBox.hide();// ocultamos combo
                 return;
             }
 
-            //Si no hay nada seleccionado y he escrito algo...
+            // Si no hay nada seleccionado o he escrito algo cambiando lo seleccionado...
             if (selected == null || !selected.equals(newValue)) {
-                //Se aplica CONDICIÓN a STRING puede ser:
-                //contiene, empieza por (startsWith), acaba en (endsWith)...
-                //filteredItems.setPredicate(p ->
-                //p.toLowerCase().contains(newValue.toLowerCase()));
+                // Se aplica CONDICIÓN a STRING puede ser:
+                // contiene, empieza por (startsWith), acaba en (endsWith)...
+                // filteredItems.setPredicate(p ->
+                // p.toLowerCase().contains(newValue.toLowerCase()));
                 filteredItems.setPredicate(p -> p.toLowerCase().startsWith(newValue.toLowerCase().trim()));
                 comboBox.setVisibleRowCount(5);
                 comboBox.show();
-            } else {
+            } else {// Ocurre si he seleccionado algo de la lista, quita el filtro
                 filteredItems.setPredicate(p -> true);
             }
         });
 
-        
-        comboBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue , newValue) -> {
+        comboBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {
-                txtCombo.positionCaret(txtCombo.getText().length()); //Se posiciona al final para poder borrar fácilmente
-                //---------------------------------------------------------------------
-                //NOTE: A partir de aquí hay cambios
+                txtCombo.positionCaret(txtCombo.getText().length()); // Se posiciona al final para poder borrar
+                                                                     // fácilmente
+                // ---------------------------------------------------------------------
+                // NOTE: A partir de aquí hay cambios
 
-                /*Mostramos un valor pero obtenemos otro asociado
-                Ejemplo:
-                -creamos un OL de objetos Serie (Nombre,Año), quiero seleccionar Nombre pero sacar Año asociado 
-                -Primero recorremos OL Serie y vamos rellenando otro OL que alimenta el combo usando 
-                series.add(SeriesBBDD.get(i).getNombre());
-                -Cuando cambio de selección, para obtener el ID hago lo siguiente:
-                    el índice del OL del combo me sirve para obtener el índice del objeto en el OL de series, y de ahí saco su ID
-                */
-                        
-                Integer id=SeriesBBDD.get(series.indexOf(comboBox.getValue())).getAnyo(); //Uso el getter del objeto seleccionado
-                System.out.println("Id de serie es "+id.toString());
+                /*
+                 * Mostramos un valor pero obtenemos otro asociado
+                 * Ejemplo:
+                 * -creamos un OL de objetos Serie (Nombre,Año), quiero seleccionar Nombre pero
+                 * sacar Año asociado
+                 * -Primero recorremos OL Serie y vamos rellenando otro OL que alimenta el combo
+                 * usando
+                 * series.add(SeriesBBDD.get(i).getNombre());
+                 * -Cuando cambio de selección, para obtener el ID hago lo siguiente:
+                 * el índice del OL del combo me sirve para obtener el índice del objeto en el
+                 * OL de series, y de ahí saco su ID
+                 */
+
+                Integer id = SeriesBBDD.get(series.indexOf(comboBox.getValue())).getAnyo(); // Uso el getter del objeto
+                                                                                            // seleccionado
+                System.out.println("Id de serie es " + id.toString());
             }
         });
 
